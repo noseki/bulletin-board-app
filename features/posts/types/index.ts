@@ -7,12 +7,12 @@ export type Post = {
     post_at: string;
 }
 
-export const CATEGORY_LABEL: Record<string, string> = {
+export const CATEGORY_LABEL: Record<Post["category"], string> = {
     announcements: "お知らせ",
     questionnaire: "アンケート",
 };
 
-export const CATEGORY_COLOR: Record<string, string> = {
+export const CATEGORY_COLOR: Record<Post["category"], string> = {
     announcements: "bg-blue-100 text-blue-700",
     questionnaire: "bg-pink-100 text-pink-700",
 };
