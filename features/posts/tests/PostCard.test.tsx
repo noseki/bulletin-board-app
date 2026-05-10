@@ -31,5 +31,5 @@ describe("PostCard", () => {
         render(<PostCard post={mockPost} />);
         const link = screen.getByRole("link");
         expect(link).toBeInTheDocument();
-    })
+    });
 })
