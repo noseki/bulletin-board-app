@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link"
-import { Post } from "../types";
+import { CATEGORY_COLOR, CATEGORY_LABEL, Post } from "../types";
+import { Badge } from "@/components/ui/badge"
 
 function PostLink({ id, children }: { id: string, children: React.ReactNode }) {
     return (
@@ -15,11 +16,12 @@ export default function PostCard({ post }: { post: Post }) {
         <PostLink id={post.id}>
             <Card className="relative mx-auto my-4 w-full max-w-sm">
                 <CardHeader>
-                    <CardTitle>{post.title}</CardTitle>
+                    <Badge className={CATEGORY_COLOR[post.category]}>{CATEGORY_LABEL[post.category]}</Badge>
+                    <CardTitle className="mt-2">{post.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div>
-                        <p className="font-medium">{post.content}</p>
+                        <p className="font-medium line-clamp-3">{post.content}</p>
                         <p className="text-sm text-muted-foreground">投稿日：{post.post_at}</p>
                         <p className="text-sm text-muted-foreground">{post.user}さん</p>
                     </div>

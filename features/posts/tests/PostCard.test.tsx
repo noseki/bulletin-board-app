@@ -19,9 +19,10 @@ const mockPost: Post = {
 }
 
 describe("PostCard", () => {
-    test("タイトル、投稿内容、投稿日時、投稿者名が表示されていること", async () => {
+    test("カテゴリー、タイトル、投稿内容、投稿日時、投稿者名が表示されていること", async () => {
         render(<PostCard post={mockPost} />);
-        expect(await screen.findByText("掲示板アプリへようこそ")).toBeInTheDocument(); // タイトル
+        expect(await screen.findByText("お知らせ")).toBeInTheDocument();
+        expect(screen.getByText("掲示板アプリへようこそ")).toBeInTheDocument(); // タイトル
         expect(screen.getByText('新しい掲示板アプリを開設しました')).toBeInTheDocument(); // 投稿内容
         expect(screen.getByText('投稿日：2026/05/01 23:59:59')).toBeInTheDocument(); // 投稿日時
         expect(screen.getByText("テスト太郎さん")).toBeInTheDocument(); // 投稿者名

@@ -1,13 +1,11 @@
-async function PostContent({ params }: { params: Promise<{ id: string }>}) {
-    const { id } = await params;
+import BackButton from "@/components/elements/backButton";
+import PostContent from "@/features/posts/components/PostContent";
+
+export default function PostDetailPage({ params }: { params: Promise<{ id: string }>}) {
     return (
         <div>
-            <h1>詳細ページ</h1>
-            <p>ID: {id}</p>
+            <BackButton />
+            <PostContent params={params} />
         </div>
-    )
-};
-
-export default function PostDetail({ params }: { params: Promise<{ id: string }>}) {
-    return <PostContent params={params} />
+    );
 }
