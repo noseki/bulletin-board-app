@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from "@/components/ui/button";
 import { useEffect } from "react"
 
 export default function Error({ 
@@ -16,9 +17,9 @@ export default function Error({
     return (
         <div>
             <h2>何か問題が発生しました！</h2>
-            <button onClick={() => reset()}>
+            <Button onClick={() => reset()}>
                 もう一度試す
-            </button>
+            </Button>
         </div>
     );
 } 

@@ -13,7 +13,7 @@ function PostLink({ id, children }: { id: string, children: React.ReactNode }) {
 export default function PostCard({ post }: { post: Post }) {
     return (
         <PostLink id={post.id}>
-            <Card key={post.id} className="relative mx-auto my-4 w-full max-w-sm">
+            <Card className="relative mx-auto my-4 w-full max-w-sm">
                 <CardHeader>
                     <CardTitle>{post.title}</CardTitle>
                 </CardHeader>
