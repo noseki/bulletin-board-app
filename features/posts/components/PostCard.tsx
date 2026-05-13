@@ -21,7 +21,7 @@ export default function PostCard({ post }: { post: Post }) {
                 </CardHeader>
                 <CardContent>
                     <div>
-                        <p className="font-medium line-clamp-3">{post.content}</p>
+                        <p className="font-medium line-clamp-1">{post.content}</p>
                         <p className="text-sm text-muted-foreground">投稿日：{post.post_at}</p>
                         <p className="text-sm text-muted-foreground">{post.user}さん</p>
                     </div>
