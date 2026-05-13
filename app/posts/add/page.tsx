@@ -2,6 +2,8 @@ import BackButton from "@/components/elements/backButton";
 import { getCategories } from "@/features/categories/api/getCategories";
 import PostForm from "@/features/posts/components/PostForm";
 
+export const dynamic = "force-dynamic";
+
 export default async function Add() {
     const categories = await getCategories();
 
