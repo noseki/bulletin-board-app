@@ -3,6 +3,7 @@
 import { createPostSchema, createPostValues } from "@/features/posts/schema";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 export type SubmitResult = 
     | { ok: true; message: string }
@@ -24,10 +25,17 @@ export async function createPost(input: createPostValues ): Promise<SubmitResult
         }
     }
 
-    await prisma.post.create({ data: parsed.data });
-    
-    return {
-        ok: true,
-        message: "投稿完了しました",
+    try {
+        await prisma.post.create({ data: parsed.data });
+        revalidatePath("/posts");
+        return {
+            ok: true,
+            message: "投稿完了しました",
+        };
+    } catch {
+        return {
+            ok: false,
+            message: "DB エラーが発生しました。再度お試しください。",
+        };
     }
 }
