@@ -184,7 +184,7 @@ export default function PostForm({ categories }: { categories: Category[] }) {
                                         />
                                         <InputGroupAddon align="block-end">
                                             <InputGroupText className="tabular-nums">
-                                                {field.value.length}/200 characters
+                                                {(field.value ?? "").length}/200 characters
                                             </InputGroupText>
                                         </InputGroupAddon>
                                     </InputGroup>
