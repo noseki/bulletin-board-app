@@ -1,18 +1,12 @@
-export type Post = {
-    id: string;
-    user: string;
-    category: "announcements" | "questionnaire";
-    title: string;
-    content: string;
-    post_at: string;
-}
+import type { Prisma } from "@/app/generated/prisma/client";
 
-export const CATEGORY_LABEL: Record<Post["category"], string> = {
-    announcements: "お知らせ",
-    questionnaire: "アンケート",
-};
+export type PostWithCategory = Prisma.PostGetPayload<{ include: { category: true }}>;
 
-export const CATEGORY_COLOR: Record<Post["category"], string> = {
+export const CATEGORY_COLOR: Record<string, string> = {
     announcements: "bg-blue-100 text-blue-700",
-    questionnaire: "bg-pink-100 text-pink-700",
+    general: "bg-green-100 text-green-700",
+    questions: "bg-pink-100 text-pink-700",
+    events: "bg-yellow-100 text-yellow-700",
 };
+
+export const DEFAULT_CATEGORY_COLOR = "bg-gray-100 text-gray-700";

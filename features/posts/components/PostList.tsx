@@ -1,7 +1,7 @@
-import { Post } from "../types";
+import { PostWithCategory } from "../types";
 import PostCard from "./PostCard";
 
-export default function PostList({ posts }: { posts: Post[]}) {
+export default function PostList({ posts }: { posts: PostWithCategory[] }) {
     return (
         <div>
             {posts.map((post) => (
