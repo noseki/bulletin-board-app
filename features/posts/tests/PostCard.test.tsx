@@ -1,6 +1,6 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from "@testing-library/react";
-import { Post } from '@/features/posts/types';
+import { PostWithCategory } from '@/features/posts/types';
 import PostCard from '@/features/posts/components/PostCard';
 
 vi.mock('next/link', () => ({
@@ -9,14 +9,19 @@ vi.mock('next/link', () => ({
     ),
 }));
 
-const mockPost: Post = {
+const mockPost: PostWithCategory = {
     id: "1",
     user: "テスト太郎",
-    category: "announcements",
     title: "掲示板アプリへようこそ",
     content: "新しい掲示板アプリを開設しました",
-    post_at: "2026/05/01 23:59:59",
-}
+    post_at: new Date(2026, 4, 1, 23, 59, 59), // 2026/05/01 23:59:59（ローカル時刻）
+    categoryId: "1",
+    category: {
+        id: "1",
+        slug: "announcements",
+        name: "お知らせ",
+    },
+};
 
 describe("PostCard", () => {
     test("カテゴリー、タイトル、投稿内容、投稿日時、投稿者名が表示されていること", async () => {
