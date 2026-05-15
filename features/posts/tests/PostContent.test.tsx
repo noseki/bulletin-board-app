@@ -48,6 +48,6 @@ describe("PostContent", () => {
         };
         render(<PostContent post={unknownCategoryPost} />);
         const badge = await screen.findByText("不明");
-        expect(badge.className).toContain("bg-gray");　// DEFAULT_CATEGORY_COLOR のクラスが含まれていることを確認
+        expect(badge.className).toContain("bg-gray"); // DEFAULT_CATEGORY_COLOR のクラスが含まれていることを確認
     });
 })

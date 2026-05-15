@@ -16,7 +16,7 @@ export default function PostCard({ post }: { post: PostWithCategory }) {
     return (
         <div className="space-y-4">
             <PostLink id={post.id}>
-                <Card  className="border-2 hover:border-gray-300 transition-colors">
+                <Card className="border-2 hover:border-gray-300 transition-colors">
                     <CardHeader>
                         <Badge className={ CATEGORY_COLOR[post.category.slug] ?? DEFAULT_CATEGORY_COLOR}>{post.category.name}</Badge>
                         <CardTitle className="mt-2">{post.title}</CardTitle>

@@ -15,5 +15,5 @@ export function formatRelativeTime(date: Date): string {
     if (days < 30)     return `${days}日前`;
     const months = Math.floor(days / 30);
     if (months < 12)   return `${months}ヶ月前`;
-    return `${Math.floor(months / 12)}年前`;    
+    return `${Math.floor(months / 12)}年前`;
 }
