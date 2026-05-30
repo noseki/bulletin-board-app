@@ -1,6 +1,6 @@
 import { describe, test, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
-import CategoryPage, { CategoriesContent } from "@/app/categories/page";
+import CategoryPage from "@/app/categories/page";
 import { getCategoriesWithCount } from "@/features/categories/api/getCategoriesWithCount";
 
 vi.mock("next/cache", () => ({
@@ -40,28 +40,21 @@ describe("CategoryPage", () => {
         );
     });
 
-    test("ページタイトルが表示されること", () => {
-        render(<CategoryPage />);
+    test("ページタイトルが表示されること", async () => {
+        render(await CategoryPage());
         expect(
             screen.getByRole("heading", { name: "カテゴリー一覧" }),
         ).toBeInTheDocument();
     });
 
-    test("投稿一覧へ戻るリンクが存在すること", () => {
-        render(<CategoryPage />);
-        const links = screen.getAllByRole("link");
-        const backLink = links.find((l) => l.getAttribute("href") === "/posts");
-        expect(backLink).toBeInTheDocument();
-    });
-
     test("カテゴリー数と総投稿数のサマリーが表示されること", async () => {
-        render(await CategoriesContent());
+        render(await CategoryPage());
         // 5 + 10 + 3 + 0 = 18
         expect(screen.getByText("4カテゴリー・計18件の投稿")).toBeInTheDocument();
     });
 
     test("すべてのカテゴリー名が表示されること", async () => {
-        render(await CategoriesContent());
+        render(await CategoryPage());
         expect(screen.getByText("お知らせ")).toBeInTheDocument();
         expect(screen.getByText("一般")).toBeInTheDocument();
         expect(screen.getByText("質問")).toBeInTheDocument();
@@ -69,7 +62,7 @@ describe("CategoryPage", () => {
     });
 
     test("各カテゴリーの投稿数が表示されること", async () => {
-        render(await CategoriesContent());
+        render(await CategoryPage());
         expect(screen.getByText("5件の投稿")).toBeInTheDocument();
         expect(screen.getByText("10件の投稿")).toBeInTheDocument();
         expect(screen.getByText("3件の投稿")).toBeInTheDocument();
@@ -77,7 +70,7 @@ describe("CategoryPage", () => {
     });
 
     test("各カテゴリーリンクが /posts?category=<slug> のhrefを持つこと", async () => {
-        render(await CategoriesContent());
+        render(await CategoryPage());
         expect(
             screen.getByRole("link", { name: /お知らせ/ }),
         ).toHaveAttribute("href", "/posts?category=announcements");
@@ -92,6 +85,13 @@ describe("CategoryPage", () => {
         ).toHaveAttribute("href", "/posts?category=events");
     });
 
+    test("投稿一覧へ戻るリンクが存在すること", async () => {
+        render(await CategoryPage());
+        const links = screen.getAllByRole("link");
+        const backLink = links.find((l) => l.getAttribute("href") === "/posts");
+        expect(backLink).toBeInTheDocument();
+    });
+
     test("未知のスラッグにはデフォルトの背景色が適用されること", async () => {
         vi.mocked(getCategoriesWithCount).mockResolvedValue([
             {
@@ -101,7 +101,7 @@ describe("CategoryPage", () => {
                 _count: { posts: 1 },
             },
         ] as Awaited<ReturnType<typeof getCategoriesWithCount>>);
-        render(await CategoriesContent());
+        render(await CategoryPage());
         const card = screen
             .getByText("不明")
             .closest(".border-2") as HTMLElement;
