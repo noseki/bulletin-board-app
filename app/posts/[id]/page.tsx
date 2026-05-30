@@ -4,7 +4,7 @@ import { Suspense } from "react";
 
 export default function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
     return (
-        <div className="relative my-auto mx-auto w-full max-w-sm space-y-4 overflow-visible">
+        <div className="relative my-auto mx-auto w-full max-w-2xl space-y-4 overflow-visible px-6 py-8">
             <BackButton />
             <Suspense fallback={<p className="text-center text-muted-foreground">読み込み中...</p>}>
                 <PostDetail params={params} />

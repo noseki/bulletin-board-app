@@ -7,7 +7,9 @@ import CategoryList from "@/features/categories/components/CategoryList";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
-function resolveSlug(category: string | string[] | undefined): string | undefined {
+function resolveSlug(
+    category: string | string[] | undefined,
+): string | undefined {
     return Array.isArray(category) ? category[0] : category;
 }
 
@@ -18,7 +20,11 @@ async function PostsContent({ searchParams }: { searchParams: SearchParams }) {
     return <PostList posts={posts} />;
 }
 
-async function CategorySidebar({ searchParams }: { searchParams: SearchParams }) {
+async function CategorySidebar({
+    searchParams,
+}: {
+    searchParams: SearchParams;
+}) {
     const { category } = await searchParams;
     return <CategoryList activeSlug={resolveSlug(category)} />;
 }
@@ -62,7 +68,7 @@ export default function PostsPage({
     return (
         <div className="px-6 py-8">
             <div className="flex items-center justify-between mb-6">
-                <h1 className="text-xl">投稿一覧</h1>
+                <h1 className="text-xl text-gray-900">みんなの投稿一覧</h1>
                 <AddButton />
             </div>
             <div className="flex flex-col gap-6 md:flex-row md:gap-8">
