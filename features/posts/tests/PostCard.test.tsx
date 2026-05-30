@@ -30,7 +30,7 @@ describe("PostCard", () => {
         expect(screen.getByText("掲示板アプリへようこそ")).toBeInTheDocument(); // タイトル
         expect(screen.getByText('新しい掲示板アプリを開設しました')).toBeInTheDocument(); // 投稿内容
         expect(screen.getByText('投稿日：2026/05/01 23:59:59')).toBeInTheDocument(); // 投稿日時
-        expect(screen.getByText("テスト太郎さん")).toBeInTheDocument(); // 投稿者名
+        expect(screen.getByText("テスト太郎")).toBeInTheDocument(); // 投稿者名
     });
 
     test("リンクが存在すること", () => {
