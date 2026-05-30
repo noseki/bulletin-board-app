@@ -6,12 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
 import { createPost, SubmitResult } from "@/features/posts/actions/createPost";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
     Field,
     FieldError,
@@ -33,43 +28,47 @@ import {
     InputGroupTextarea,
 } from "@/components/ui/input-group";
 import { Category } from "@/app/generated/prisma/client";
+import { redirect } from "next/navigation";
 
 export default function PostForm({ categories }: { categories: Category[] }) {
     const [result, setResult] = useState<SubmitResult | null>(null);
     const [isPending, startTransition] = useTransition();
 
-    const {
-        control,
-        handleSubmit,
-        reset,
-        trigger,
-    } = useForm<createPostValues>({
-        resolver: zodResolver(createPostSchema),
-        defaultValues: {
-            categoryId: "",
-            user: "",
-            title: "",
-            content: "",
+    const { control, handleSubmit, reset, trigger } = useForm<createPostValues>(
+        {
+            resolver: zodResolver(createPostSchema),
+            defaultValues: {
+                categoryId: "",
+                user: "",
+                title: "",
+                content: "",
+            },
+            mode: "onBlur",
         },
-        mode: "onBlur",
-    });
+    );
 
     const onSubmit = (values: createPostValues) => {
         setResult(null);
 
         startTransition(async () => {
-            const r = await createPost(values);
-            setResult(r);
-            if (r.ok) reset();
+            const res = await createPost(values);
+            setResult(res);
+            if (res.ok) {
+                reset();
+                redirect("/");
+            }
         });
     };
 
     return (
         <Card>
-            <form 
+            <form
                 onSubmit={handleSubmit(onSubmit)}
                 onKeyDown={(e) => {
-                    if (e.key === "Enter" && e.target instanceof HTMLInputElement) {
+                    if (
+                        e.key === "Enter" &&
+                        e.target instanceof HTMLInputElement
+                    ) {
                         e.preventDefault();
                     }
                 }}
@@ -77,7 +76,7 @@ export default function PostForm({ categories }: { categories: Category[] }) {
                 <CardHeader className="mb-4">
                     <CardTitle>新規投稿</CardTitle>
                 </CardHeader>
-                
+
                 <CardContent>
                     <FieldGroup>
                         {/* カテゴリー */}
@@ -87,7 +86,8 @@ export default function PostForm({ categories }: { categories: Category[] }) {
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
                                     <FieldLabel htmlFor={field.name}>
-                                        カテゴリー<span className="text-red-500">*</span>
+                                        カテゴリー
+                                        <span className="text-red-500">*</span>
                                     </FieldLabel>
                                     <Select
                                         name={field.name}
@@ -102,14 +102,19 @@ export default function PostForm({ categories }: { categories: Category[] }) {
                                         </SelectTrigger>
                                         <SelectContent position="item-aligned">
                                             {categories.map((c) => (
-                                                <SelectItem key={c.id} value={c.id}>
+                                                <SelectItem
+                                                    key={c.id}
+                                                    value={c.id}
+                                                >
                                                     {c.name}
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
                                     </Select>
                                     {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
+                                        <FieldError
+                                            errors={[fieldState.error]}
+                                        />
                                     )}
                                 </Field>
                             )}
@@ -121,7 +126,8 @@ export default function PostForm({ categories }: { categories: Category[] }) {
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
                                     <FieldLabel htmlFor={field.name}>
-                                        投稿者名<span className="text-red-500">*</span>
+                                        投稿者名
+                                        <span className="text-red-500">*</span>
                                     </FieldLabel>
                                     <Input
                                         id={field.name}
@@ -135,7 +141,9 @@ export default function PostForm({ categories }: { categories: Category[] }) {
                                         }}
                                     />
                                     {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
+                                        <FieldError
+                                            errors={[fieldState.error]}
+                                        />
                                     )}
                                 </Field>
                             )}
@@ -147,7 +155,8 @@ export default function PostForm({ categories }: { categories: Category[] }) {
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
                                     <FieldLabel htmlFor={field.name}>
-                                        タイトル<span className="text-red-500">*</span>
+                                        タイトル
+                                        <span className="text-red-500">*</span>
                                     </FieldLabel>
                                     <Input
                                         id={field.name}
@@ -160,7 +169,9 @@ export default function PostForm({ categories }: { categories: Category[] }) {
                                         }}
                                     />
                                     {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
+                                        <FieldError
+                                            errors={[fieldState.error]}
+                                        />
                                     )}
                                 </Field>
                             )}
@@ -172,7 +183,8 @@ export default function PostForm({ categories }: { categories: Category[] }) {
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
                                     <FieldLabel htmlFor={field.name}>
-                                        投稿内容<span className="text-red-500">*</span>
+                                        投稿内容
+                                        <span className="text-red-500">*</span>
                                     </FieldLabel>
                                     <InputGroup>
                                         <InputGroupTextarea
@@ -184,12 +196,15 @@ export default function PostForm({ categories }: { categories: Category[] }) {
                                         />
                                         <InputGroupAddon align="block-end">
                                             <InputGroupText className="tabular-nums">
-                                                {(field.value ?? "").length}/200 characters
+                                                {(field.value ?? "").length}/200
+                                                characters
                                             </InputGroupText>
                                         </InputGroupAddon>
                                     </InputGroup>
                                     {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
+                                        <FieldError
+                                            errors={[fieldState.error]}
+                                        />
                                     )}
                                 </Field>
                             )}
@@ -202,17 +217,17 @@ export default function PostForm({ categories }: { categories: Category[] }) {
                     {result && (
                         <div
                             className={`mt-6 p-4 rounded-lg border-2 ${
-                            result.ok
-                                ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
-                                : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
+                                result.ok
+                                    ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
+                                    : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
                             } transition-all duration-300 animate-in fade-in slide-in-from-top-2`}
                         >
                             <p
-                            className={`text-sm font-medium flex items-center gap-2 ${
-                                result.ok
-                                ? "text-green-800 dark:text-green-300"
-                                : "text-red-800 dark:text-red-300"
-                            }`}
+                                className={`text-sm font-medium flex items-center gap-2 ${
+                                    result.ok
+                                        ? "text-green-800 dark:text-green-300"
+                                        : "text-red-800 dark:text-red-300"
+                                }`}
                             >
                                 {result.message}
                             </p>
@@ -220,7 +235,11 @@ export default function PostForm({ categories }: { categories: Category[] }) {
                             {!result.ok && result.fieldErrors && (
                                 <div className="mt-3 p-3 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700">
                                     <pre className="text-xs text-gray-600 dark:text-gray-400 whitespace-pre-wrap overflow-x-auto">
-                                    {JSON.stringify(result.fieldErrors, null, 2)}
+                                        {JSON.stringify(
+                                            result.fieldErrors,
+                                            null,
+                                            2,
+                                        )}
                                     </pre>
                                 </div>
                             )}
@@ -230,4 +249,4 @@ export default function PostForm({ categories }: { categories: Category[] }) {
             </form>
         </Card>
     );
-};
+}
