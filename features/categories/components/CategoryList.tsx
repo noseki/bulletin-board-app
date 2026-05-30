@@ -35,7 +35,7 @@ export default async function CategoryList({
             <Link
                 href="/posts"
                 className={cn(
-                    "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted",
+                    "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-gray-300 dark:hover:bg-zinc-800",
                     !activeSlug && "bg-muted font-medium",
                 )}
             >
@@ -49,7 +49,7 @@ export default async function CategoryList({
                         key={category.id}
                         href={`/posts?category=${category.slug}`}
                         className={cn(
-                            "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted",
+                            "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-gray-300 dark:hover:bg-zinc-800",
                             activeSlug === category.slug &&
                                 "bg-muted font-medium",
                         )}
@@ -59,6 +59,13 @@ export default async function CategoryList({
                     </Link>
                 );
             })}
+            <Link
+                href="/categories"
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-gray-300 dark:hover:bg-zinc-800 mt-2 border-t pt-3"
+            >
+                <Tag className="h-4 w-4 shrink-0" />
+                カテゴリー一覧
+            </Link>
         </nav>
     );
 }
