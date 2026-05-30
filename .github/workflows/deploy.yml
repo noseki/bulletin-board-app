@@ -13,9 +13,22 @@ jobs:
   build:
     name: Build Phase
     runs-on: ubuntu-latest
-    # env:
-      # VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-      # VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: bulletin_board
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/bulletin_board
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -30,6 +43,11 @@ jobs:
         run: |
           npm config set legacy-peer-deps true
           npm install
+
+      - name: Run migrations and seed
+        run: |
+          npx prisma migrate deploy
+          npx prisma db seed
 
       - name: Build application
         run: npm run build
