@@ -5,10 +5,22 @@ import { getPosts } from "@/features/posts/api/getPosts";
 import PostList from "@/features/posts/components/PostList";
 import CategoryList from "@/features/categories/components/CategoryList";
 
-async function PostsContent({ categorySlug }: { categorySlug?: string }) {
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+function resolveSlug(category: string | string[] | undefined): string | undefined {
+    return Array.isArray(category) ? category[0] : category;
+}
+
+async function PostsContent({ searchParams }: { searchParams: SearchParams }) {
+    const { category } = await searchParams;
     await connection();
-    const posts = await getPosts(categorySlug);
+    const posts = await getPosts(resolveSlug(category));
     return <PostList posts={posts} />;
+}
+
+async function CategorySidebar({ searchParams }: { searchParams: SearchParams }) {
+    const { category } = await searchParams;
+    return <CategoryList activeSlug={resolveSlug(category)} />;
 }
 
 function PostListSkeleton() {
@@ -42,14 +54,11 @@ function CategoryListSkeleton() {
     );
 }
 
-export default async function PostsPage({
+export default function PostsPage({
     searchParams,
 }: {
-    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+    searchParams: SearchParams;
 }) {
-    const { category } = await searchParams;
-    const categorySlug = Array.isArray(category) ? category[0] : category;
-
     return (
         <div className="px-6 py-8">
             <div className="flex items-center justify-between mb-6">
@@ -59,12 +68,12 @@ export default async function PostsPage({
             <div className="flex flex-col gap-6 md:flex-row md:gap-8">
                 <aside className="md:w-56 shrink-0">
                     <Suspense fallback={<CategoryListSkeleton />}>
-                        <CategoryList activeSlug={categorySlug} />
+                        <CategorySidebar searchParams={searchParams} />
                     </Suspense>
                 </aside>
                 <main className="flex-1 min-w-0">
                     <Suspense fallback={<PostListSkeleton />}>
-                        <PostsContent categorySlug={categorySlug} />
+                        <PostsContent searchParams={searchParams} />
                     </Suspense>
                 </main>
             </div>
