@@ -1,4 +1,3 @@
-import { cacheLife } from "next/cache";
 import Link from "next/link";
 import {
     Megaphone,
@@ -31,9 +30,6 @@ const CATEGORY_BG: Record<string, string> = {
 const DEFAULT_CATEGORY_BG = "bg-gray-50 border-gray-200 hover:border-gray-300 dark:bg-zinc-900 dark:border-zinc-800 dark:hover:border-zinc-700";
 
 export default async function CategoryPage() {
-    "use cache";
-    cacheLife("max");
-
     const categories = await getCategoriesWithCount();
     const totalPosts = categories.reduce((sum, c) => sum + c._count.posts, 0);
 
