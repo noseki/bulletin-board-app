@@ -1,9 +1,12 @@
 import { prisma } from "@/lib/prisma";
 
-export async function getPosts() {
+export async function getPosts(categorySlug?: string) {
     return prisma.post.findMany({
+        where: categorySlug
+            ? { category: { slug: categorySlug } }
+            : undefined,
         include: { category: true },
         orderBy: { post_at: "desc" },
-        take: 50, // 取得件数を制限
+        take: 50,
     });
 }
