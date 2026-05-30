@@ -23,12 +23,12 @@ const CATEGORY_ICON: Record<string, LucideIcon> = {
 };
 
 const CATEGORY_BG: Record<string, string> = {
-    announcements: "bg-blue-50 border-blue-200 hover:border-blue-300",
-    general: "bg-green-50 border-green-200 hover:border-green-300",
-    questions: "bg-pink-50 border-pink-200 hover:border-pink-300",
-    events: "bg-yellow-50 border-yellow-200 hover:border-yellow-300",
+    announcements: "bg-blue-50 border-blue-200 hover:border-blue-300 dark:bg-blue-950/20 dark:border-blue-900 dark:hover:border-blue-800",
+    general: "bg-green-50 border-green-200 hover:border-green-300 dark:bg-green-950/20 dark:border-green-900 dark:hover:border-green-800",
+    questions: "bg-pink-50 border-pink-200 hover:border-pink-300 dark:bg-pink-950/20 dark:border-pink-900 dark:hover:border-pink-800",
+    events: "bg-yellow-50 border-yellow-200 hover:border-yellow-300 dark:bg-yellow-950/20 dark:border-yellow-900 dark:hover:border-yellow-800",
 };
-const DEFAULT_CATEGORY_BG = "bg-gray-50 border-gray-200 hover:border-gray-300";
+const DEFAULT_CATEGORY_BG = "bg-gray-50 border-gray-200 hover:border-gray-300 dark:bg-zinc-900 dark:border-zinc-800 dark:hover:border-zinc-700";
 
 export default async function CategoryPage() {
     "use cache";
