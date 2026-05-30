@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+import { cacheLife } from "next/cache";
 import Link from "next/link";
 import {
     Megaphone,
@@ -29,25 +31,17 @@ const CATEGORY_BG: Record<string, string> = {
 };
 const DEFAULT_CATEGORY_BG = "bg-gray-50 border-gray-200 hover:border-gray-300 dark:bg-zinc-900 dark:border-zinc-800 dark:hover:border-zinc-700";
 
-export default async function CategoryPage() {
+async function CategoriesContent() {
+    "use cache";
+    cacheLife("max");
     const categories = await getCategoriesWithCount();
     const totalPosts = categories.reduce((sum, c) => sum + c._count.posts, 0);
 
     return (
-        <div className="px-6 py-8">
-            <div className="flex items-center gap-3 mb-2">
-                <Link
-                    href="/posts"
-                    className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                    <ArrowLeft className="h-5 w-5" />
-                </Link>
-                <h1 className="text-xl font-semibold">カテゴリー一覧</h1>
-            </div>
+        <>
             <p className="text-sm text-muted-foreground mb-8 pl-8">
                 {categories.length}カテゴリー・計{totalPosts}件の投稿
             </p>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {categories.map((category) => {
                     const Icon = CATEGORY_ICON[category.slug] ?? Tag;
@@ -85,6 +79,42 @@ export default async function CategoryPage() {
                     );
                 })}
             </div>
+        </>
+    );
+}
+
+function CategoriesSkeleton() {
+    return (
+        <div className="space-y-4 animate-pulse">
+            <div className="h-4 w-48 bg-muted rounded mb-8 ml-8" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="border-2 rounded-lg p-6">
+                        <div className="w-12 h-12 rounded-xl bg-muted mb-4" />
+                        <div className="h-5 w-24 bg-muted rounded mb-2" />
+                        <div className="h-4 w-16 bg-muted rounded" />
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+export default function CategoryPage() {
+    return (
+        <div className="px-6 py-8">
+            <div className="flex items-center gap-3 mb-2">
+                <Link
+                    href="/posts"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                    <ArrowLeft className="h-5 w-5" />
+                </Link>
+                <h1 className="text-xl font-semibold">カテゴリー一覧</h1>
+            </div>
+            <Suspense fallback={<CategoriesSkeleton />}>
+                <CategoriesContent />
+            </Suspense>
         </div>
     );
 }
