@@ -10,7 +10,7 @@ export default function ReloadButton({ id }: { id: string }) {
             <Button
                 type="submit"
                 variant="outline"
-                className="w-full hover:bg-gray-300"
+                className="w-full"
             >
                 更新する
             </Button>
