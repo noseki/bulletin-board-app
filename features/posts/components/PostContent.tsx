@@ -37,7 +37,7 @@ export default function PostContent({ post }: { post: PostWithCategory }) {
                 </div>
             </CardHeader>
             <CardContent>
-                <div className="prose mb-6">
+                <div className="prose max-w-none mb-6">
                     <p className="whitespace-pre-line text-gray-700">
                         {post.content}
                     </p>
