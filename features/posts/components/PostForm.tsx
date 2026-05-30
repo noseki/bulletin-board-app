@@ -28,13 +28,14 @@ import {
     InputGroupTextarea,
 } from "@/components/ui/input-group";
 import { Category } from "@/app/generated/prisma/client";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function PostForm({ categories }: { categories: Category[] }) {
+    const router = useRouter();
     const [result, setResult] = useState<SubmitResult | null>(null);
     const [isPending, startTransition] = useTransition();
 
-    const { control, handleSubmit, reset, trigger } = useForm<createPostValues>(
+    const { control, handleSubmit, reset } = useForm<createPostValues>(
         {
             resolver: zodResolver(createPostSchema),
             defaultValues: {
@@ -43,7 +44,7 @@ export default function PostForm({ categories }: { categories: Category[] }) {
                 title: "",
                 content: "",
             },
-            mode: "onBlur",
+            mode: "all",
         },
     );
 
@@ -55,7 +56,7 @@ export default function PostForm({ categories }: { categories: Category[] }) {
             setResult(res);
             if (res.ok) {
                 reset();
-                redirect("/");
+                router.push("/");
             }
         });
     };
@@ -137,7 +138,6 @@ export default function PostForm({ categories }: { categories: Category[] }) {
                                         placeholder="テスト太郎"
                                         onChange={(event) => {
                                             field.onChange(event.target.value);
-                                            trigger(field.name);
                                         }}
                                     />
                                     {fieldState.invalid && (
@@ -165,7 +165,6 @@ export default function PostForm({ categories }: { categories: Category[] }) {
                                         aria-invalid={fieldState.invalid}
                                         onChange={(event) => {
                                             field.onChange(event.target.value);
-                                            trigger(field.name);
                                         }}
                                     />
                                     {fieldState.invalid && (
