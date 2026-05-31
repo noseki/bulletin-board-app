@@ -3,7 +3,7 @@
 import { createPostSchema, createPostValues } from "@/features/posts/schema";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 
 export type SubmitResult = 
     | { ok: true; message: string }
@@ -28,6 +28,7 @@ export async function createPost(input: createPostValues ): Promise<SubmitResult
     try {
         await prisma.post.create({ data: parsed.data });
         revalidatePath("/posts");
+        updateTag("categories");
         return {
             ok: true,
             message: "投稿完了しました",

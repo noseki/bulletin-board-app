@@ -2,18 +2,28 @@
 
 import { Button } from "@/components/ui/button";
 import { revalidatePost } from "../actions/revalidatePost";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 
 export default function ReloadButton({ id }: { id: string }) {
+    const router = useRouter();
+    const [isPending, startTransition] = useTransition();
+
+    const handleClick = () => {
+        startTransition(async () => {
+            await revalidatePost(id);
+            router.refresh();
+        });
+    };
+
     return (
-        <form action={revalidatePost}>
-            <input type="hidden" name="id" value={id} />
-            <Button
-                type="submit"
-                variant="outline"
-                className="w-full"
-            >
-                更新する
-            </Button>
-        </form>
+        <Button
+            onClick={handleClick}
+            variant="outline"
+            className="w-full"
+            disabled={isPending}
+        >
+            {isPending ? "更新中..." : "更新する"}
+        </Button>
     );
 }
