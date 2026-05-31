@@ -1,7 +1,7 @@
 import { describe, test, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import CategoryPage from "@/app/categories/page";
-import { getCategoriesWithCount } from "@/features/categories/api/getCategoriesWithCount";
+import { getCategories } from "@/features/categories/api/getCategories";
 
 vi.mock("next/cache", () => ({
     cacheLife: vi.fn(),
@@ -24,19 +24,19 @@ vi.mock("next/link", () => ({
     ),
 }));
 
-vi.mock("@/features/categories/api/getCategoriesWithCount");
+vi.mock("@/features/categories/api/getCategories");
 
 const mockCategories = [
-    { id: "1", slug: "announcements", name: "お知らせ", _count: { posts: 5 } },
-    { id: "2", slug: "general", name: "一般", _count: { posts: 10 } },
-    { id: "3", slug: "questions", name: "質問", _count: { posts: 3 } },
-    { id: "4", slug: "events", name: "イベント", _count: { posts: 0 } },
+    { id: "1", slug: "announcements", name: "お知らせ" },
+    { id: "2", slug: "general", name: "一般" },
+    { id: "3", slug: "questions", name: "質問" },
+    { id: "4", slug: "events", name: "イベント" },
 ];
 
 describe("CategoryPage", () => {
     beforeEach(() => {
-        vi.mocked(getCategoriesWithCount).mockResolvedValue(
-            mockCategories as Awaited<ReturnType<typeof getCategoriesWithCount>>,
+        vi.mocked(getCategories).mockResolvedValue(
+            mockCategories as Awaited<ReturnType<typeof getCategories>>,
         );
     });
 
@@ -47,10 +47,9 @@ describe("CategoryPage", () => {
         ).toBeInTheDocument();
     });
 
-    test("カテゴリー数と総投稿数のサマリーが表示されること", async () => {
+    test("カテゴリー数のサマリーが表示されること", async () => {
         render(await CategoryPage());
-        // 5 + 10 + 3 + 0 = 18
-        expect(screen.getByText("4カテゴリー・計18件の投稿")).toBeInTheDocument();
+        expect(screen.getByText("4カテゴリー")).toBeInTheDocument();
     });
 
     test("すべてのカテゴリー名が表示されること", async () => {
@@ -59,14 +58,6 @@ describe("CategoryPage", () => {
         expect(screen.getByText("一般")).toBeInTheDocument();
         expect(screen.getByText("質問")).toBeInTheDocument();
         expect(screen.getByText("イベント")).toBeInTheDocument();
-    });
-
-    test("各カテゴリーの投稿数が表示されること", async () => {
-        render(await CategoryPage());
-        expect(screen.getByText("5件の投稿")).toBeInTheDocument();
-        expect(screen.getByText("10件の投稿")).toBeInTheDocument();
-        expect(screen.getByText("3件の投稿")).toBeInTheDocument();
-        expect(screen.getByText("0件の投稿")).toBeInTheDocument();
     });
 
     test("各カテゴリーリンクが /posts?category=<slug> のhrefを持つこと", async () => {
@@ -93,14 +84,9 @@ describe("CategoryPage", () => {
     });
 
     test("未知のスラッグにはデフォルトの背景色が適用されること", async () => {
-        vi.mocked(getCategoriesWithCount).mockResolvedValue([
-            {
-                id: "99",
-                slug: "unknown",
-                name: "不明",
-                _count: { posts: 1 },
-            },
-        ] as Awaited<ReturnType<typeof getCategoriesWithCount>>);
+        vi.mocked(getCategories).mockResolvedValue([
+            { id: "99", slug: "unknown", name: "不明" },
+        ] as Awaited<ReturnType<typeof getCategories>>);
         render(await CategoryPage());
         const card = screen
             .getByText("不明")

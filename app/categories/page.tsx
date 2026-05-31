@@ -7,11 +7,10 @@ import {
     Tag,
     ArrowLeft,
     ArrowRight,
-    FileText,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { getCategoriesWithCount } from "@/features/categories/api/getCategoriesWithCount";
+import { getCategories } from "@/features/categories/api/getCategories";
 import { CATEGORY_COLOR, DEFAULT_CATEGORY_COLOR } from "@/features/posts/types";
 
 const CATEGORY_ICON: Record<string, LucideIcon> = {
@@ -30,8 +29,7 @@ const CATEGORY_BG: Record<string, string> = {
 const DEFAULT_CATEGORY_BG = "bg-gray-50 border-gray-200 hover:border-gray-300 dark:bg-zinc-900 dark:border-zinc-800 dark:hover:border-zinc-700";
 
 export default async function CategoryPage() {
-    const categories = await getCategoriesWithCount();
-    const totalPosts = categories.reduce((sum, c) => sum + c._count.posts, 0);
+    const categories = await getCategories();
 
     return (
         <div className="px-6 py-8">
@@ -45,7 +43,7 @@ export default async function CategoryPage() {
                 <h1 className="text-xl font-semibold">カテゴリー一覧</h1>
             </div>
             <p className="text-sm text-muted-foreground mb-8 pl-8">
-                {categories.length}カテゴリー・計{totalPosts}件の投稿
+                {categories.length}カテゴリー
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -73,12 +71,6 @@ export default async function CategoryPage() {
                                     <h2 className="font-semibold text-base mb-1">
                                         {category.name}
                                     </h2>
-                                    <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                                        <FileText className="h-3.5 w-3.5" />
-                                        <span>
-                                            {category._count.posts}件の投稿
-                                        </span>
-                                    </div>
                                 </CardContent>
                             </Card>
                         </Link>
