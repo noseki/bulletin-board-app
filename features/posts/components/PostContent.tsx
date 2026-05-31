@@ -5,7 +5,7 @@ import {
 } from "../types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { formatRelativeTime } from "../lib/utils";
+import RelativeTime from "./RelativeTime";
 
 export default function PostContent({ post }: { post: PostWithCategory }) {
     return (
@@ -31,7 +31,7 @@ export default function PostContent({ post }: { post: PostWithCategory }) {
                     <div>
                         <p className="font-medium text-sm">{post.user}</p>
                         <p className="text-xs text-gray-500">
-                            {formatRelativeTime(post.post_at)}
+                            <RelativeTime date={post.post_at} />
                         </p>
                     </div>
                 </div>
