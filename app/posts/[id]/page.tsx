@@ -5,7 +5,6 @@ import { Suspense } from "react";
 
 export async function generateStaticParams() {
     const posts = await prisma.post.findMany({ select: { id: true } });
-    if (posts.length === 0) return [{ id: "_placeholder" }];
     return posts.map((p) => ({ id: p.id }));
 }
 
