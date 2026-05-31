@@ -5,6 +5,8 @@ import { Suspense } from "react";
 
 export async function generateStaticParams() {
     const posts = await prisma.post.findMany({ select: { id: true } });
+    // Cache Components (Next.js 16) requires at least one result; PostDetail calls notFound() for invalid IDs.
+    if (posts.length === 0) return [{ id: "_placeholder" }];
     return posts.map((p) => ({ id: p.id }));
 }
 
